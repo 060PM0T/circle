@@ -1,0 +1,13 @@
+cairocffi==0.8.0
+cffi==1.11.0
+cycler==0.10.0
+matplotlib==2.0.2
+numpy==1.13.1
+pycparser==2.18
+pyparsing==2.2.0
+python-dateutil==2.6.1
+pytz==2017.2
+ruamel.yaml==0.15.34
+six==1.11.0
+vext==0.6.9
+vext.gi==0.6.8
