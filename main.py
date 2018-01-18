@@ -4,58 +4,62 @@ from sympy import diff, symbols, cos, sin
 
 def test_conditions(pr, func, func_d1, func_d2):
     x = pr
-    print(pr)
-    func_scalar = eval(str(func))
-    func_d1_scalar = eval(str(func_d1))
-    func_d2_scalar = eval(str(func_d2))
-    print(func_scalar)
+    func = eval(str(func))
+    func_d1 = eval(str(func_d1))
+    func_d2 = eval(str(func_d2))
     
-    if func_scalar != 0:
-        func1 = pr * (func_d1_scalar / func_scalar)  # условие A
-        print (func1)
-        if func1 != 0:
-            if func1.real > 0:  # Проверка условия A
-                func2 = 1 + pr * (func_d2_scalar /
-                                  func_d1_scalar)  # условие B
-                if func2.real > 0:  # Проверка условия B
-                    #print(func2)
-                    graf1.plot(func2.real, func2.imag, '-k.')
+    if func.real < 100 and func.real > -100:
+        if func.imag < 100 and func.imag > -100:
+            graf1.plot(func.real, func.imag, '-g.')
 
-
+    if func != 0 and func_d1 != 0:
+        func1 = x * (func_d1 / func)  # условие *
+        if func1.real > 0:  # Проверка условия *
+            func2 = 1 + x * (func_d2 / func_d1)  # условие 0
+            if func2.real > 0:  # Проверка условия 0
+                graf.plot(x.real, x.imag, '-k.')
+                graf1.plot(func.real, func.imag, '-k.')
+            else:
+                graf.plot(x.real, x.imag, '-y.')
+                graf1.plot(func.real, func.imag, '-y.')
+        else:
+            graf.plot(x.real, x.imag, '-r.')
+               
 def build(n):
     dr = 1 / n  # Расстояние
     df = (2 * np.pi) / n  # Поворот
-    d = 0.1
+    d = 0.05
     l = np.arange(-1, 1, d)
     X = []
-    Y = []
+    Y = []    
+    global graf1, graf #graf2
     graf = pylab.subplot(1,2,1)
-    global graf1
     graf1 = pylab.subplot(1,2,2)
+    #graf2 = pylab.subplot(1,3,3)
 
     x = 'x'
-    func = 'x / (x + 1)'# исходная функция
-    func_d1 = diff(func, x) # производная по x
-    func_d2 = diff(func_d1, x) # вторя производная по х
+    func = 'x / (x + 1)**2'# исходная функция
+    func_d1 = diff(func, x) #'(1-x)/(1+x)**3' # производная по x
+    func_d2 = diff(func_d1, x) #'(-4+2*x)/(1+x)**4' # вторя производная по х
     #отображение функций
     #print(func)
     #print(func_d1)
     #print(func_d2)
     
-    # рисует точки в кружке)))
+    # заполнение массива X и iY
     for x in l:
         for y in l:
-            if x**2 + y**2 < 1:
+            if x**2 + y**2 < 1-0.05:
                 X.append(x)
                 Y.append(1j * y)
 
-    # Отрисовка точек в круге
     for i in range(len(Y)):
+        # Отрисовка точек в круге.
         graf.plot(X[i], Y[i].imag, '-b.')
-        #вызов функции тест
+        # Вызов функции тест.
         test_conditions(X[i] + Y[i], func, func_d1, func_d2)
 
-    #Точки в кручке
+    # Граница круга
     k = np.arange(n + 1)  # Формируем массив
     alfa = k * df
     rad = n * dr
@@ -66,9 +70,7 @@ def build(n):
     graf.axis('equal')
     #graf1.axis('equal')# Маштабирование - круг кругом
 
-
-if __name__ == '__main__':
-    n = 25
-    main_window = pylab.figure()  # Окно с графиком
-    build(n)
-    pylab.show()
+n = 25
+main_window = pylab.figure()  # Окно с графиком
+build(n)
+pylab.show()
